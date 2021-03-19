@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
-using Jellyfin.Plugin.Template.Configuration;
+using Jellyfin.Plugin.ITunes.Configuration;
 using MediaBrowser.Common.Configuration;
 using MediaBrowser.Common.Plugins;
 using MediaBrowser.Model.Plugins;
 using MediaBrowser.Model.Serialization;
 
-namespace Jellyfin.Plugin.Template
+namespace Jellyfin.Plugin.ITunes
 {
     public class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
     {
-        public override string Name => "Template";
+        public override string Name => "iTunes";
 
-        public override Guid Id => Guid.Parse("eb5d7894-8eef-4b36-aa6f-5d124e828ce1");
+        public override Guid Id => Guid.Parse("a9f62a44-fea5-46c3-ac26-55abba29c7c8");
 
         public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer) : base(applicationPaths, xmlSerializer)
         {
