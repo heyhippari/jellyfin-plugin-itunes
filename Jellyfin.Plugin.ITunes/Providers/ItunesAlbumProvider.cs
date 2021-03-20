@@ -1,11 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Common.Net;
@@ -20,22 +16,22 @@ using Jellyfin.Plugin.ITunes.Dtos;
 
 namespace Jellyfin.Plugin.ITunes.Providers
 {
-    public class ITunesAlbumProvider : IRemoteImageProvider, IHasOrder
+    public class ITunesAlbumImageProvider : IRemoteImageProvider, IHasOrder
     {
         private readonly IHttpClientFactory _httpClientFactory;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ITunesAlbumProvider"/> class.
+        /// Initializes a new instance of the <see cref="ITunesAlbumImageProvider"/> class.
         /// </summary>
         /// <param name="httpClientFactory">Instance of the <see cref="IHttpClientFactory"/> interface.</param>
         /// <param name="logger">Instance of the <see cref="ILogger{CoverArtArchiveImageProvider}"/> interface.</param>
-        public ITunesAlbumProvider(IHttpClientFactory httpClientFactory)
+        public ITunesAlbumImageProvider(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }
 
         /// <inheritdoc />
-        public string Name => "iTunes";
+        public string Name => "Apple Music";
 
         /// <inheritdoc />
         public int Order => 1; // After embedded provider
@@ -100,8 +96,9 @@ namespace Jellyfin.Plugin.ITunes.Providers
             {
                 foreach (Result result in iTunesAlbumDto.Results)
                 {
-                    // The max artwork size is 3000x3000. Some might return less, but we can't predict that.
-                    var image1400 = result.ArtworkUrl100.Replace("100x100bb","3000x3000bb");
+                    // The artwork size can vary quite a bit, but for our uses, 1400x1400 should be plenty.
+                    // https://artists.apple.com/support/88-artist-image-guidelines
+                    var image1400 = result.ArtworkUrl100.Replace("100x100bb","1400x1400bb");
 
                     list.Add(
                         new RemoteImageInfo
@@ -110,7 +107,8 @@ namespace Jellyfin.Plugin.ITunes.Providers
                             Url = image1400,
                             Type = ImageType.Primary,
                             ThumbnailUrl = result.ArtworkUrl100,
-                            RatingType = RatingType.Score,
+                            Height = 1400,
+                            Width = 1400
                         }
                     );
                 }
